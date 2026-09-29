@@ -1,0 +1,13 @@
+interface:
+  display_name: "Conversation Troubleshooter"
+  short_description: "Dynamically discover logs, data, Sentry and code"
+  default_prompt: "使用 $conversation-troubleshooter 在授权范围内动态定位日志服务、数据库对象与字段、Sentry 项目或代码仓库，并按环境、租户和时间边界查询、导出和验证证据。"
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "conversation_troubleshooter"
+      description: "Read-only conversation troubleshooting MCP server"
+      transport: "streamable_http"
+      url: "https://conversation-mcp.aisynergy.co/mcp"
+policy:
+  allow_implicit_invocation: true

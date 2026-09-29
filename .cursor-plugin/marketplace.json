@@ -1,0 +1,30 @@
+{
+  "name": "synergyai-tools",
+  "owner": {
+    "name": "SYNERGYAISE"
+  },
+  "metadata": {
+    "description": "SYNERGYAI developer investigation skills"
+  },
+  "plugins": [
+    {
+      "name": "conversation-troubleshooter",
+      "source": "plugins/conversation-troubleshooter",
+      "description": "Investigate authorized conversations, logs, databases, Sentry incidents, and dependency code.",
+      "version": "0.1.0",
+      "author": {
+        "name": "SYNERGYAISE"
+      },
+      "homepage": "https://github.com/LinkHu-ai/conversation_troubleshooter_skill",
+      "repository": "https://github.com/LinkHu-ai/conversation_troubleshooter_skill",
+      "keywords": [
+        "incident-investigation",
+        "logs",
+        "database",
+        "sentry"
+      ],
+      "category": "Developer Tools"
+    }
+  ]
+}
+

@@ -1,0 +1,21 @@
+{
+  "name": "synergyai-tools",
+  "interface": {
+    "displayName": "SYNERGYAI Tools"
+  },
+  "plugins": [
+    {
+      "name": "conversation-troubleshooter",
+      "source": {
+        "source": "local",
+        "path": "./plugins/conversation-troubleshooter"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
+

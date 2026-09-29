@@ -1,0 +1,44 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "conversation-troubleshooter",
+  "version": "0.1.0",
+  "description": "Read-only investigation workflows for authorized logs, tenant-scoped databases, Sentry incidents, dependency code, and validated exports.",
+  "author": {
+    "name": "SYNERGYAISE",
+    "url": "https://github.com/LinkHu-ai"
+  },
+  "homepage": "https://github.com/LinkHu-ai/conversation_troubleshooter_skill",
+  "repository": "https://github.com/LinkHu-ai/conversation_troubleshooter_skill",
+  "keywords": [
+    "incident-investigation",
+    "logs",
+    "database",
+    "sentry",
+    "source-code"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Conversation Troubleshooter",
+        "shortDescription": "Investigate logs, data, Sentry, and code",
+        "longDescription": "Dynamically discovers authorized log services, tenant-scoped database objects, Sentry projects, and local-to-remote dependency code, then correlates evidence and validates bounded exports.",
+        "developerName": "SYNERGYAISE",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read-only incident investigation",
+          "Dynamic log and database discovery",
+          "Sentry issue and event analysis",
+          "Cross-repository dependency analysis",
+          "Validated CSV and XLSX export workflows"
+        ],
+        "websiteURL": "https://github.com/LinkHu-ai/conversation_troubleshooter_skill",
+        "defaultPrompt": [
+          "Trace this conversation end to end and identify the earliest verified break point.",
+          "Find matching logs, data, Sentry evidence, and dependency code within the authorized scope.",
+          "Export the bounded matching data and report validation counts and completeness."
+        ]
+      }
+    }
+  }
+}
+
