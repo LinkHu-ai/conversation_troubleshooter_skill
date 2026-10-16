@@ -5,11 +5,12 @@
 | User-facing environment | Git ref |
 |---|---|
 | omitted for code-only local development | `main` |
+| `dev` | `devnet` |
 | `chess` | `testnet` |
 | `uat` | `main` |
 | `production` | `main` |
 
-“Test environment” is ambiguous between `chess` and `uat`; ask which one. Treat “formal,” “online,”
+Explicit “dev” or “开发环境” means `dev`. “Test environment” is ambiguous; ask which environment instead of silently mapping it to dev, chess, or UAT. Treat “formal,” “online,”
 or “production” as `production` only when the surrounding request clearly uses those terms for the
 live environment.
 
@@ -24,6 +25,24 @@ temporarily select an already-authorized main-mapped environment (`uat` preferre
 
 UAT and production share the `main` source branch, but their runtime logs and databases are distinct.
 Never use one environment's runtime evidence as proof of behavior in the other.
+
+## Dev data-source isolation
+
+For `dev`, GitHub reads `devnet`, Loki filters `environment=dev`, and Sentry uses the server's
+`SENTRY_ENV_DEV` mapping (default `dev`). A default-main code query remains `main`; selecting dev
+must be explicit and must pass `env:dev` authorization.
+
+Database and export requests require a dev-specific server-side connection, in addition to catalog
+and tenant authorization. The MCP SSH gateway uses `SSH_DEV_MYSQL_COMMAND` and/or
+`SSH_DEV_POSTGRES_COMMAND`: administrator-managed read-only wrapper executables, not user-supplied
+connection strings. Schema discovery and row queries must use the same dev connection. Missing dev
+or dialect configuration must return an explicit unavailable/configuration error; never fall back
+to the default production wrapper, another environment, or a different credential.
+
+Do not infer the database environment from database names: dev and production may both contain
+`admin_api`, `message_hub`, and `ai_backend`. Identical tenant IDs across environments do not imply
+shared data. A conversation export touching both PostgreSQL and MySQL requires both dev connections;
+a missing stage is a failure/incomplete result, never proof that records do not exist.
 
 ## Role access
 

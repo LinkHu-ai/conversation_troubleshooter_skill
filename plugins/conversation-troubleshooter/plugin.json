@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "conversation-troubleshooter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Read-only investigation workflows for authorized logs, tenant-scoped databases, Sentry incidents, dependency code, and validated exports.",
   "author": {
     "name": "SYNERGYAISE",
@@ -41,4 +41,3 @@
     }
   }
 }
-

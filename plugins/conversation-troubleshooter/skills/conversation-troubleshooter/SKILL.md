@@ -1,6 +1,6 @@
 ---
 name: conversation-troubleshooter
-description: Dynamically discover and investigate AI-support behavior across authorized logs, tenant-scoped databases, Sentry projects, local-to-remote dependency code, and environment-specific code, including validated exports. Use for open-ended data/log/code/error searches, cross-repository development analysis, conversation IDs, knowledge-card or UID problems, missing AI replies, tool execution or interception, and Sentry project, Issue, Event, trace, release, or runtime queries in chess, UAT, or production.
+description: Dynamically discover and investigate AI-support behavior across authorized logs, tenant-scoped databases, Sentry projects, local-to-remote dependency code, and environment-specific code, including validated exports. Use for open-ended data/log/code/error searches, cross-repository development analysis, conversation IDs, knowledge-card or UID problems, missing AI replies, tool execution or interception, and Sentry project, Issue, Event, trace, release, or runtime queries in dev, chess, UAT, or production.
 ---
 
 # Conversation Troubleshooter
@@ -14,6 +14,11 @@ a Sentry service/project plus an Issue ID, Event ID, trace ID, request ID, UID, 
 phrase. Mentions of Sentry project visibility, top errors, error counts, an Issue/Event URL, runtime
 exceptions, stack traces, crash/error spikes, release failures, or a service error in one of the
 supported environments are sufficient to activate the skill.
+
+Skill/MCP implementation maintenance is a local code-development task, not an incident query.
+When the user explicitly requests edits to this skill or its MCP service, inspect and test the local
+source without requiring an MCP login. Authentication below applies before protected runtime/data
+queries; maintenance itself does not authorize querying live business data or deploying changes.
 
 ## Mandatory step zero: authenticate before reasoning
 
@@ -112,8 +117,9 @@ Sentry event details.
 
 Before querying, identify:
 
-- environment: `chess`, `uat`, or `production`; this is optional only for a code-only local
-  development dependency analysis, where omission defaults GitHub code reads to `main`;
+- environment: `dev`, `chess`, `uat`, or `production`; explicit “dev/开发环境” always means `dev`,
+  never `chess`. This is optional only for a code-only local development dependency analysis, where
+  omission defaults GitHub code reads to `main`;
 - timezone and approximate occurrence time or an explicit time range;
 - tenant when the request queries or exports tenant-scoped business data;
 - investigation focus: full chain, knowledge-card selection, missing AI reply, tool execution, or
@@ -135,9 +141,10 @@ provide an ID, environment, and time. Present the following interaction immediat
 请选择或填写排查条件（可按“环境 / 目标 / 时间 / 会话ID”回复）：
 
 1. 环境
-   1) chess（测试环境，testnet 分支）
-   2) uat（UAT 环境，main 分支）
-   3) production（正式环境，main 分支）
+   1) dev（开发环境，devnet 分支）
+   2) chess（测试环境，testnet 分支）
+   3) uat（UAT 环境，main 分支）
+   4) production（正式环境，main 分支）
 
 2. 排查目标
    1) 完整会话链路

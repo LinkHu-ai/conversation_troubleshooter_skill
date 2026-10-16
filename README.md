@@ -4,6 +4,13 @@ Conversation Troubleshooter is a read-only Agent Skill for investigating authori
 
 This repository contains only the portable Skill and marketplace metadata. It does not contain the MCP service implementation, upstream credentials, tokens, private keys, or environment files.
 
+## Environments
+
+Supported runtime environments: `dev` (`devnet`), `chess` (`testnet`), `uat` and `production` (`main`).
+Dev queries require an MCP server version that accepts `dev`, grants the account `env:dev`, and
+configures isolated dev data sources. Updating this skill alone does not upgrade or deploy the MCP
+server. An unconfigured dev database must fail explicitly rather than use production data.
+
 ## Prerequisite
 
 The Skill expects an authenticated MCP connection named `conversation_troubleshooter`. The MCP service owns all log-platform, database, Sentry, GitHub, and shared-host credentials. Installing this repository does not grant access to those systems.
