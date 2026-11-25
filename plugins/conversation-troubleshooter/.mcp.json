@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "aisynergy_skill_mcp": {
+      "type": "http",
+      "url": "https://aisynergy-skill-mcp.test.aisynergy.co/mcp"
+    }
+  }
+}

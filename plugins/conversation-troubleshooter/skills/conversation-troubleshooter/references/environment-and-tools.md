@@ -6,11 +6,11 @@
 |---|---|
 | omitted for code-only local development | `main` |
 | `dev` | `devnet` |
-| `chess` | `testnet` |
+| `testnet` | `testnet` |
 | `uat` | `main` |
 | `production` | `main` |
 
-Explicit “dev” or “开发环境” means `dev`. “Test environment” is ambiguous; ask which environment instead of silently mapping it to dev, chess, or UAT. Treat “formal,” “online,”
+Map “开发环境” to `dev`, “测试环境” to `testnet`, and explicit UAT to `uat`. Treat “formal,” “online,”
 or “production” as `production` only when the surrounding request clearly uses those terms for the
 live environment.
 
@@ -32,12 +32,9 @@ For `dev`, GitHub reads `devnet`, Loki filters `environment=dev`, and Sentry use
 `SENTRY_ENV_DEV` mapping (default `dev`). A default-main code query remains `main`; selecting dev
 must be explicit and must pass `env:dev` authorization.
 
-Database and export requests require a dev-specific server-side connection, in addition to catalog
-and tenant authorization. The MCP SSH gateway uses `SSH_DEV_MYSQL_COMMAND` and/or
-`SSH_DEV_POSTGRES_COMMAND`: administrator-managed read-only wrapper executables, not user-supplied
-connection strings. Schema discovery and row queries must use the same dev connection. Missing dev
-or dialect configuration must return an explicit unavailable/configuration error; never fall back
-to the default production wrapper, another environment, or a different credential.
+Database and export requests require a dev-specific server-side connection, catalog authorization,
+and the applicable tenant boundary. Use the same environment for schema discovery and row queries.
+Report an explicit data-source error if the dev connection or required dialect is unavailable.
 
 Do not infer the database environment from database names: dev and production may both contain
 `admin_api`, `message_hub`, and `ai_backend`. Identical tenant IDs across environments do not imply
@@ -50,10 +47,14 @@ a missing stage is a failure/incomplete result, never proof that records do not 
 |---|---:|---:|---:|---:|---:|---:|
 | `admin` | Yes | Yes | Yes | Yes | Yes | Yes, through the server-rendered admin console |
 | `developer` | Yes | Yes | Yes | Yes | Yes | No |
-| `operations` | Yes | Yes | No | Yes | No | No |
+| `operations` | Yes | Tenant-scoped | Yes | Yes | No | No |
 
 The MCP server enforces this matrix on every tool call. Do not interpret a tool being visible in a
 client list as proof that the signed-in role may invoke it. Do not work around a permission denial.
+
+The shared connection can also expose Jira reads when configured. Code submission, Draft PRs, and
+Jira writes require the developer role and the applicable allowlists. Test Git merges are handled
+in GitHub. Use the appropriate team Skill for explicitly authorized writes.
 
 ## MCP tool selection
 
@@ -164,7 +165,9 @@ fields are searchable. For other bounded Tag, release, level, or text conditions
 `sentry_query_issues`; its `any` alternatives must share one field. Use `sentry_query_events` only
 when compact event rows are necessary and the signed-in role has `sentry:events:read`. Targeted
 searches default to 15 minutes, allow at most 120 minutes, and return at most 20 Issues.
-`sentry_get_issue` returns one sanitized Issue summary; event samples remain limited to 5. Never pass
+`sentry_get_issue` returns one sanitized Issue summary; event samples remain limited to 5. For
+individual Event detail requests, select `testnet` for Test. The service recognizes Sentry tags
+`test` and `testnet` and validates the returned event environment. Never pass
 raw Sentry syntax or auto-page. Only retrieve one full event when it materially closes an evidence gap.
 
 Do not pass arbitrary Sentry query syntax or auto-page. A project inventory or top-Issue list is an

@@ -5,9 +5,9 @@ interface:
 dependencies:
   tools:
     - type: "mcp"
-      value: "conversation_troubleshooter"
+      value: "aisynergy_skill_mcp"
       description: "Read-only conversation troubleshooting MCP server"
       transport: "streamable_http"
-      url: "https://conversation-mcp.aisynergy.co/mcp"
+      url: "https://aisynergy-skill-mcp.test.aisynergy.co/mcp"
 policy:
   allow_implicit_invocation: true

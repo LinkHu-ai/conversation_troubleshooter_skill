@@ -1,6 +1,6 @@
 ---
 name: conversation-troubleshooter
-description: Dynamically discover and investigate AI-support behavior across authorized logs, tenant-scoped databases, Sentry projects, local-to-remote dependency code, and environment-specific code, including validated exports. Use for open-ended data/log/code/error searches, cross-repository development analysis, conversation IDs, knowledge-card or UID problems, missing AI replies, tool execution or interception, and Sentry project, Issue, Event, trace, release, or runtime queries in dev, chess, UAT, or production.
+description: Dynamically discover and investigate AI-support behavior across authorized logs, tenant-scoped databases, Sentry projects, local-to-remote dependency code, and environment-specific code, including validated exports. Use for open-ended data/log/code/error searches, cross-repository development analysis, conversation IDs, knowledge-card or UID problems, missing AI replies, tool execution or interception, and Sentry project, Issue, Event, trace, release, or runtime queries in dev, testnet, UAT, or production.
 ---
 
 # Conversation Troubleshooter
@@ -25,7 +25,7 @@ queries; maintenance itself does not authorize querying live business data or de
 Authentication is the first action for every matching request. Before describing the investigation
 scope, interpreting the incident, choosing a time window, reading plugin or local files, inspecting
 cache paths, searching code, or announcing an investigation plan, check whether the host has an
-authenticated `conversation_troubleshooter` MCP connection.
+authenticated `aisynergy_skill_mcp` MCP connection.
 
 - If the connection state is unknown, make only the minimum MCP connection or protected-tool attempt
   needed for the host to determine it. Do not investigate the incident first.
@@ -56,8 +56,8 @@ authenticated `conversation_troubleshooter` MCP connection.
   select a time window, or perform any part of the investigation.
 - If the host already opened the OAuth page, do not launch a duplicate. If it cannot open one, give
   the exact host-provided authorization link when available, followed by the appropriate native MCP
-  login action: `codex mcp login conversation_troubleshooter` for Codex CLI or
-  `agent mcp login conversation_troubleshooter` for Cursor CLI.
+  login action: `codex mcp login aisynergy_skill_mcp` for Codex CLI or
+  `agent mcp login aisynergy_skill_mcp` for Cursor CLI.
 - A `http://127.0.0.1...` or `http://localhost...` redirect after successful login is the MCP
   client's loopback callback, not another login page. Do not open, copy, follow, or navigate to that
   callback independently. Keep the native OAuth operation alive so its local listener consumes the
@@ -73,7 +73,7 @@ authenticated `conversation_troubleshooter` MCP connection.
 ## Investigate within the authenticated role
 
 Build an evidence-backed explanation of what happened in one conversation. Use the
-`conversation_troubleshooter` MCP tools; do not request or expose upstream GitHub, Sentry,
+`aisynergy_skill_mcp` MCP tools; do not request or expose upstream GitHub, Sentry,
 log-platform, database, or MCP credentials.
 
 Never ask the user to type a username, email, password, authorization code, or token into the
@@ -85,8 +85,8 @@ state and PKCE parameters.
 Treat `PERMISSION_DENIED` as an enforced service-side role decision. Do not retry through another
 tool or ask for upstream credentials to bypass it. Administrators and developers may query logs,
 databases, code, Sentry issue summaries, and individual Sentry event details. Operations users may
-query logs, databases, and Sentry issue summaries, but must not use GitHub tools or request full
-Sentry event details.
+query logs, tenant-scoped databases, GitHub code, and Sentry Issue summaries. Full Sentry event
+details require the administrator or developer role.
 
 ## Production-query invariants
 
@@ -117,8 +117,8 @@ Sentry event details.
 
 Before querying, identify:
 
-- environment: `dev`, `chess`, `uat`, or `production`; explicit “dev/开发环境” always means `dev`,
-  never `chess`. This is optional only for a code-only local development dependency analysis, where
+- environment: `dev`, `testnet`, `uat`, or `production`; explicit “dev/开发环境” always means `dev`,
+  never `testnet`. This is optional only for a code-only local development dependency analysis, where
   omission defaults GitHub code reads to `main`;
 - timezone and approximate occurrence time or an explicit time range;
 - tenant when the request queries or exports tenant-scoped business data;
@@ -142,7 +142,7 @@ provide an ID, environment, and time. Present the following interaction immediat
 
 1. 环境
    1) dev（开发环境，devnet 分支）
-   2) chess（测试环境，testnet 分支）
+   2) testnet（测试环境，testnet 分支）
    3) uat（UAT 环境，main 分支）
    4) production（正式环境，main 分支）
 
@@ -169,8 +169,8 @@ only some scope values, retain those values and present only the missing groups 
 labels and options. Never fall back to an unstructured “请提供...” prompt.
 
 For a recent incident without a range, offer the last 15 minutes as the first choice rather than
-silently assuming it. For a historical incident, require the approximate occurrence time. Treat
-“test environment” as ambiguous and ask the environment choice.
+silently assuming it. For a historical incident, require the approximate occurrence time. Map “测试环境” to
+`testnet` and explicit UAT to `uat`.
 
 Treat IDs and UIDs as strings, preserving leading zeros and hyphens. Never substitute an admin ID,
 workspace ID, assignee ID, or prior-conversation UID for the incoming user's UID.

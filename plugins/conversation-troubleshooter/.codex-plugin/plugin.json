@@ -1,0 +1,35 @@
+{
+  "name": "conversation-troubleshooter",
+  "version": "0.2.0",
+  "description": "Read-only conversation, tool-call, UID, Sentry, log, database, and source-code investigation plugin.",
+  "author": {
+    "name": "SYNERGYAISE"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Conversation Troubleshooter",
+    "shortDescription": "Investigate conversation chains with traceable evidence.",
+    "longDescription": "Correlates conversation logs, Sentry runtime errors, tool-call and UID validation records, read-only database evidence, and environment-specific GitHub source code.",
+    "developerName": "SYNERGYAISE",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read-only incident investigation",
+      "Conversation timeline correlation",
+      "Knowledge-card selection tracing",
+      "Sentry project inventory, top-Issue ranking, and bounded issue/event analysis",
+      "Bounded structured log, Sentry, and tenant-scoped database queries",
+      "Tenant-bounded production data validation",
+      "Private repository code analysis"
+    ],
+    "defaultPrompt": [
+      "Trace this conversation end to end from the inbound message to the final reply.",
+      "Explain how this conversation selected its knowledge card and show the decision flow.",
+      "Investigate only why this conversation did not receive an AI reply and propose a fix.",
+      "Show the matched card, tool arguments, result, and any interception condition for this conversation.",
+      "List visible Sentry projects or rank the top bounded issues for one service and environment.",
+      "Query bounded logs, approved database views, or Sentry tags when fixed investigation tools cannot express the filter.",
+      "Investigate this Sentry Issue, Event, trace, request, release, or runtime error and correlate it with logs and code when needed."
+    ]
+  },
+  "mcpServers": "./.mcp.json"
+}

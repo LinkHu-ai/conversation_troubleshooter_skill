@@ -2,20 +2,20 @@
 
 Conversation Troubleshooter is a read-only Agent Skill for investigating authorized AI-support behavior across logs, tenant-scoped databases, Sentry incidents, and local-to-remote dependency code. It also defines bounded, validated data-export workflows.
 
-This repository contains only the portable Skill and marketplace metadata. It does not contain the MCP service implementation, upstream credentials, tokens, private keys, or environment files.
+This repository contains the Skill, MCP connection manifests, and marketplace metadata. It does not contain the MCP service implementation, upstream credentials, tokens, private keys, or environment files.
 
 ## Environments
 
-Supported runtime environments: `dev` (`devnet`), `chess` (`testnet`), `uat` and `production` (`main`).
+Supported runtime environments: `dev` (`devnet`), `testnet`, `uat` and `production` (`main`).
 Dev queries require an MCP server version that accepts `dev`, grants the account `env:dev`, and
 configures isolated dev data sources. Updating this skill alone does not upgrade or deploy the MCP
 server. An unconfigured dev database must fail explicitly rather than use production data.
 
 ## Prerequisite
 
-The Skill expects an authenticated MCP connection named `conversation_troubleshooter`. The MCP service owns all log-platform, database, Sentry, GitHub, and shared-host credentials. Installing this repository does not grant access to those systems.
+The Skill expects an authenticated MCP connection named `aisynergy_skill_mcp`. It connects to [Test MCP](https://aisynergy-skill-mcp.test.aisynergy.co/mcp). The MCP service owns all log-platform, database, Sentry, GitHub, and shared-host credentials. Installing this repository does not grant access to those systems.
 
-The OpenAI Skill metadata declares the public MCP endpoint used by the current deployment. Hosts that do not consume `agents/openai.yaml` must configure the MCP connection separately.
+Codex reads `.mcp.json` and Agent Plugins-compatible hosts can read `mcp.json`. They point to the same endpoint as the Skill metadata. Sign in through the host’s MCP OAuth flow.
 
 ## Repository layout
 
@@ -24,6 +24,9 @@ The OpenAI Skill metadata declares the public MCP endpoint used by the current d
 ├── .agents/plugins/marketplace.json
 ├── .cursor-plugin/marketplace.json
 └── plugins/conversation-troubleshooter/
+    ├── .codex-plugin/plugin.json
+    ├── .mcp.json
+    ├── mcp.json
     ├── plugin.json
     └── skills/conversation-troubleshooter/
         ├── SKILL.md
@@ -90,4 +93,4 @@ python3 /path/to/skill-creator/scripts/quick_validate.py \
   plugins/conversation-troubleshooter/skills/conversation-troubleshooter
 ```
 
-Keep the plugin version in `plugin.json` and both marketplace manifests synchronized for each release.
+Keep the plugin version in `plugin.json`, `.codex-plugin/plugin.json`, and the Cursor marketplace entry synchronized.
